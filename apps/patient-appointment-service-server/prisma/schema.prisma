@@ -1,0 +1,39 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Patient {
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  email        String?
+  id           String        @id @default(cuid())
+  name         String?
+  phone        String?
+  updatedAt    DateTime      @updatedAt
+}
+
+model Appointment {
+  appointmentDateTime DateTime?
+  createdAt           DateTime  @default(now())
+  doctor              Doctor?   @relation(fields: [doctorId], references: [id])
+  doctorId            String?
+  id                  String    @id @default(cuid())
+  medicalIssue        String?
+  patient             Patient?  @relation(fields: [patientId], references: [id])
+  patientId           String?
+  updatedAt           DateTime  @updatedAt
+}
+
+model Doctor {
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  id           String        @id @default(cuid())
+  name         String?
+  specialty    String?
+  updatedAt    DateTime      @updatedAt
+}
